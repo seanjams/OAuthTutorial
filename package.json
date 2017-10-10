@@ -11,11 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.1",
     "nodemon": "^1.12.1",
     "passport": "^0.4.0",
+    "passport-google-oauth": "^1.0.0",
     "passport-jwt": "^3.0.0",
-    "pg": "^6.1.0"
+    "pg": "^6.4.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
