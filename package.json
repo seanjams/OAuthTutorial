@@ -1,0 +1,19 @@
+{
+  "name": "Auth0Tutorial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.1",
+    "nodemon": "^1.12.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^3.0.0",
+    "pg": "^7.3.0"
+  }
+}
