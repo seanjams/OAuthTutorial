@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     req.addEventListener('load', () => {
       console.log(this.responseText);
     });
-    req.open("GET", "http://127.0.0.1:8080/auth/google");
+    req.open("GET", "http://localhost:8080/auth/google");
     req.send();
   })
 

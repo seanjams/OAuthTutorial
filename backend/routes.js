@@ -11,7 +11,7 @@ export const routerConfig = (app, passport) => {
   app.get('/', (req, res) => {
     res.send("Index Page");
   });
-  app.get('/api/users/:userId', controller.fetchUser);
+  // app.get('/api/users/:userId', controller.fetchUser);
   app.get('/profile', isLoggedIn, controller.getAllUsers);
 
   app.get('/auth/google',

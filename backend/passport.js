@@ -1,12 +1,12 @@
+import pg from 'pg';
 import { find, findByGoogleId, addNewUser } from './controller.js';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { googleConfig } from './auth.js';
 
-import pg from 'pg';
 const connectionString = process.env.DATABASE_URL || 'postgres://localhost/auth0tutorial';
-const client = new pg.Client(connectionString);
 
 export const passportConfig = (passport) => {
+  let client = new pg.Client(connectionString);
   // used to serialize the user for the session
   passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -20,6 +20,7 @@ export const passportConfig = (passport) => {
           data => {
             const user = data.rows[0];
             done(null, user);
+            // client.end();
           },
           err => {
             done(err, null);
@@ -35,10 +36,11 @@ export const passportConfig = (passport) => {
   },
   (token, refreshToken, profile, done) => {
 
+
     // make the code asynchronous
     // User.findOne won't fire until we have all our data back from Google
     process.nextTick(() => {
-
+      let client = new pg.Client(connectionString);
         // try to find the user based on their google id
       // findByGoogleId(profile.id)
       client.connect(err => {
@@ -49,7 +51,6 @@ export const passportConfig = (passport) => {
               // if a user is found, log them in
               if (user) {
                 done(null, user);
-                // client.end();
               } else {
                 client.query(`INSERT INTO users (name, email, googleId, token) VALUES (\'${profile.name.givenName}\', \'${profile.emails[0].value}\', \'${profile.id}\', \'${token}\') RETURNING *`)
                   .then(data => {
