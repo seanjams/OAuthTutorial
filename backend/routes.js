@@ -4,11 +4,10 @@ const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  // res.redirect('/');
+  res.redirect('/');
 }
 
 export const routerConfig = (app, passport) => {
-  // app.get('/', controller.getAllUsers);
   app.get('/', (req, res) => {
     res.send("Index Page");
   });
