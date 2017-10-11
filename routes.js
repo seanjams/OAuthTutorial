@@ -1,13 +1,13 @@
-import { getAllUsers } from './database.js';
+import { getAllUsers } from './controller.js';
 
-function isLoggedIn(req, res, next) {
+const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/api/users');
+  res.redirect('/');
 }
 
-export function routerConfig(app, passport) {
+export const routerConfig = (app, passport) => {
   app.get('/profile', isLoggedIn, getAllUsers);
 
   app.get('/auth/google',
@@ -18,8 +18,8 @@ export function routerConfig(app, passport) {
 
   app.get('/auth/google/callback',
     passport.authenticate('google', {
-      successRedirect: '/profile',
-      failureredirect: '/'
+      successRedirect: '/api/users',
+      failureredirect: '/api/users'
     })
   );
 }

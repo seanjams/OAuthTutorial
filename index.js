@@ -1,9 +1,9 @@
 import express from 'express';
-import * as db from './database.js';
+import * as controller from './controller.js';
 import bodyParser from 'body-parser';
 import passport from 'passport';
-import { passportConfig } from 'passport.js';
-import { routerConfig } from 'routes.js'
+import { passportConfig } from './passport.js';
+import { routerConfig } from './routes.js'
 
 const app = express();
 
@@ -12,13 +12,16 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-app.get('/api/users', db.getAllUsers);
-app.get('/api/users/:userId', db.fetchUser);
-app.post('/api/users', db.createUser);
+app.get('/api/users', controller.getAllUsers);
+app.get('/api/users/:userId', controller.fetchUser);
+// app.post('/api/users', controller.createUser);
 
 passportConfig(passport);
+app.use(passport.initialize());
 routerConfig(app, passport);
 
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+
+
+app.listen(8080, () => {
+  console.log('Example app listening on port 8080!');
 });
