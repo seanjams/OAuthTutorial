@@ -2,10 +2,10 @@
   "name": "Auth0Tutorial",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js --exec babel-node --presets es2015"
+    "start": "nodemon backend/server.js --exec babel-node --presets es2015"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +16,6 @@
     "nodemon": "^1.12.1",
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
-    "passport-jwt": "^3.0.0",
     "pg": "^6.4.2"
   },
   "devDependencies": {
