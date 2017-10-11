@@ -21,3 +21,5 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
 });
+
+// window.addEventListener('hashchange', function(e){console.log('hash changed')});

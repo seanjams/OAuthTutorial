@@ -1,4 +1,5 @@
 import * as controller from './controller.js';
+import path from 'path';
 
 const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -9,10 +10,12 @@ const isLoggedIn = (req, res, next) => {
 
 export const routerConfig = (app, passport) => {
   app.get('/', (req, res) => {
-    res.send("Index Page");
+    res.sendFile(path.join(__dirname, '../index.html'));
   });
   // app.get('/api/users/:userId', controller.fetchUser);
-  app.get('/profile', isLoggedIn, controller.getAllUsers);
+  app.get('/profile', isLoggedIn, (req, res) => {
+    res.send("Welcome!!")
+  });
 
   app.get('/auth/google',
     passport.authenticate('google', {
@@ -29,6 +32,7 @@ export const routerConfig = (app, passport) => {
 
   app.get('/logout', (req, res) => {
     req.logout();
-    res.redirect('/');
+    req.session.destroy();
+    res.send('logged out');
   });
 }
