@@ -9,12 +9,15 @@ const isLoggedIn = (req, res, next) => {
 }
 
 export const routerConfig = (app, passport) => {
+  app.get('/api/users', controller.getAllUsers);
+  app.get('/api/users/:userId', controller.fetchUser);
+
   app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html'));
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
   });
   // app.get('/api/users/:userId', controller.fetchUser);
   app.get('/profile', isLoggedIn, (req, res) => {
-    res.send("Welcome!!")
+    res.sendFile(path.join(__dirname, '../frontend/profile.html'));
   });
 
   app.get('/auth/google',
@@ -33,6 +36,6 @@ export const routerConfig = (app, passport) => {
   app.get('/logout', (req, res) => {
     req.logout();
     req.session.destroy();
-    res.send('logged out');
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
   });
 }
