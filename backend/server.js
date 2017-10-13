@@ -5,8 +5,8 @@ import session from 'express-session';
 import * as controller from './controller.js';
 import { passportConfig } from './passport.js';
 import { routerConfig } from './routes.js';
-import path from 'path';
 
+//start the train
 const app = express();
 
 // //when we make post requests, we want to have the data sent in a body attribute
