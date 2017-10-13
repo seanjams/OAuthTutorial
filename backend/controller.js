@@ -1,5 +1,5 @@
 const pg = require('pg');
-const connectionString = process.env.DATABASE_URL || 'postgres://localhost/auth0tutorial';
+import { connectionString } from './util.js'
 
 export const getAllUsers = (req, res) => {
   const client = new pg.Client(connectionString);
