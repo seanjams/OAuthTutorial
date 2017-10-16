@@ -10,10 +10,10 @@ First we will get everything set up for success. Start by visiting https://conso
 - First, enter a project name and click 'Create', you will be given a project ID. Save it somewhere, it may be useful for your app later. (Not for ours!)
 ![one](assets/one.png)
 ---
-- Next, find Google+ API in the list of API's. Click on this item and then click 'Enable'.
+- Next, find Google+ API in the list of API's. Click on this item and then choose 'Enable'.
 ![two](assets/two.png)
 ---
-- Now that Google+ API is enabled, go to the left menu and click 'Credentials'. Select 'Create Credentials' and you will open a modal where you can select 'OAuth client ID'.
+- Go to the left menu and click 'Credentials'. Select 'Create Credentials' and you will open a modal where you can select 'OAuth client ID'.
 ![three](assets/three.png)
 ---
  - You will be told that you that you must create a consent screen before editing Credentials. Click 'Configure consent screen' in the top right corner, and just enter your project name and 'Save'. You can customize this menu for your own apps in the future.
@@ -25,7 +25,7 @@ First we will get everything set up for success. Start by visiting https://conso
 - Lastly, copy your clientID and client secret into an empty file, and we will use these in our app!
 ![six](assets/six.png)
 ---
-We are now setup to use Google+ API in our new app. Before we can start building, we must make sure we have PostgreSQL installed and running on our computer.
+We are now setup to use Google+ API. However, before we can start building, we must have a database to work with. For this tutorial, make sure you have PostgreSQL installed and running on our computer. If you'd like to use a different database, the logic presented here should be easily adaptable.
 
 From the command line, run `psql` to open PostgreSQL. Type in the following command to create a new database titled `OAuthTutorial`. Don't forget the semicolon.
 
@@ -36,7 +36,7 @@ Now create a new directory titled whatever you'd like, and run `npm init --yes` 
 ### Node Modules We Will Use
 - `babel-cli` --- transpiles our fancy ES6 code into less fancy ES5 code
 - `babel-preset-es2015` --- ES6 preset
-- `body-parser` --- used for sending form data in express requests
+- `body-parser` --- for sending form data in express requests
 - `ejs` --- for rendering HTML embedded with javascript
 - `express` --- for running our backend server
 - `express-session` --- for storing our session tokens
@@ -78,7 +78,26 @@ Go ahead and run `npm start` from the root directory and verify that everything'
 
 ## Phase 2
 
-Now let's test our connection to our database by writing some simple controller actions and routes. Make two new files in `backend` called `routes.js` and `controller.js`. First, let's write a controller that will fetch all users in our database. We can quickly set up our test routes with the following few lines of code.
+Now let's test our connection to our database by writing some simple controller actions and routes. Make two new files in `backend` called `routes.js` and `controller.js`.
+
+First, let's write a controller that will fetch all users in our database.
+
+```
+const pg = require('pg');
+const connectionString = process.env.DATABASE_URL || 'postgres://localhost/OAuthTutorial';
+
+export const getAllUsers = (req, res) => {
+  const client = new pg.Client(connectionString);
+  client.connect(err => {
+    client.query("SELECT * FROM users")
+      .then(data => res.status(200).json({ users: data.rows }))
+      .then(() => client.end());
+  })
+};
+```
+
+
+We can quickly set up our test routes with the following few lines of code.
 
 ```
 import * as controller from './controller.js';
