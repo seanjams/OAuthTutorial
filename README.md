@@ -51,13 +51,13 @@ export const googleConfig = {
 
 ### DB Setup
 
-We are now setup to use Google+ API. However, before we can start building, we must have a database to work with. For this tutorial, make sure you have PostgreSQL installed and running on our computer. If you'd like to use a different database, the logic presented here should be easily adaptable.
+We are now setup to use Google+ API. However, before we can start building, we must have a database to work with. For this tutorial, make sure you have PostgreSQL installed and running on our computer.
 
 From the command line, run `psql` to open PostgreSQL. Type in the following commands to create a new database titled `OAuthTutorial` with a `users` table containing 5 fields. Don't forget the semicolons.
 
-- `CREATE DATABASE OAuthTutorial;`
-- `\c OAuthTutorial`
-- `CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(80) NOT NULL, email VARCHAR(80) NOT NULL, avatar VARCHAR(200), googleId VARCHAR(80) NOT NULL, token VARCHAR(200) NOT NULL);`
+1. `CREATE DATABASE OAuthTutorial;`
+2. `\c OAuthTutorial`
+3. `CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(80) NOT NULL, email VARCHAR(80) NOT NULL, avatar VARCHAR(200), googleId VARCHAR(80) NOT NULL, token VARCHAR(200) NOT NULL);`
 
 ### Node Setup
 
@@ -76,11 +76,11 @@ Exit Postgres and run `npm init --yes` in our new directory to create a `package
 - `passport-google-oauth` --- for Google implementation specifically
 - `pg` --- for connecting to our Postgres database and making queries
 
-Run `npm install --save module1 module2 ...` to install the node modules above. Woot! We are ready to start coding!
+Run `npm install --save module1 module2 ...` to install the node modules above. Woot! We are ready to start coding.
 
 ## Phase 1
 
-Now for the fun stuff. Let's create a file called `server.js` and start a basic express server. Put this file in a new directory called `/backend`, along with `util.js`.
+Let's create a file called `server.js` and start a basic express server. Put this file in a new directory called `/backend`, along with `util.js`.
 
 ``` javascript
 import express from 'express';
@@ -94,7 +94,7 @@ app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
 ```
-This is pretty standard boiler-plate express code. You may be curious about what `bodyParser` is doing. This enables frontend forms to ship data along with POST requests to our Express backend. Although we won't have any forms to worry about, it will help you test your database connection with Postman in future apps.
+This is pretty standard boiler-plate express code, in which we create an `app`, add some middleware (more to come), and then serve it on port `3000`. You may be curious about what `bodyParser` is doing. This enables frontend forms to ship data along with POST requests to our Express backend. Although we won't have any forms to worry about, it will help you test your database connection with Postman in future apps.
 
 We can try and run this file and start the server with the command `node backend/server.js`, but our ES6 code will cause the server to break. Additionally, it would break every time we updated our code in the future. Let's run the server with `nodemon` so we don't have to worry about ES6 or continually restarting our server. Add the following script under `"start"` to your `package.json`.
 
@@ -111,7 +111,7 @@ Go ahead and run `npm start` in the console from the root directory and verify t
 
 Now let's test our connection to our database by writing some simple controllers and routes. Make two new files in `/backend`  called `controller.js` and `routes.js`.
 
-First, let's write a controller that will fetch all users in our database. Each Express controller function takes a request and response as its first two arguments, and generally follows these steps:
+Write a controller that will fetch all users in our database. Each Express controller function takes a request and response as its first two arguments, and generally follows these steps:
 1. Open a connection to the database. (unless using an ORM)
 2. Query the database for the information you need.
 3. If found, send the data in the response argument as JSON.
@@ -166,7 +166,7 @@ app.listen(3000, () => {
 
 Since our backend is being served by nodemon, we can see if there are any users in our database by making a GET request to http://localhost:3000/api/users.
 
-Explore writing the entire CRUD cycle in these two files and test with Postman! This is how we create simple RESTful API endpoints in Node.js.
+Looks like there's nothing. But if you see an object resembling `{users: []}`, then that means our controller works! Explore writing the entire CRUD cycle in these two files and test with Postman. Add and create dummy users until you're comfortable you've got the hang of controllers. This is how we create simple RESTful API endpoints in Node.js.
 
 ## Phase 3
 
