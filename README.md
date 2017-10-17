@@ -13,7 +13,7 @@ First we will get everything set up for success. Start by visiting https://conso
 - Next, find Google+ API in the list of API's. Click on this item and then choose 'Enable'.
 ![two](assets/two.png)
 ---
-- Go to the left menu and click 'Credentials'. Select 'Create Credentials' and you will open a modal where you can select 'OAuth client ID'.
+- Go to the left menu and click 'Credentials'. Select 'Create Credentials' and 'OAuth client ID'.
 ![three](assets/three.png)
 ---
  - You will be told that you that you must create a consent screen before editing Credentials. Click 'Configure consent screen' in the top right corner, and just enter your project name and 'Save'. You can customize this menu for your own apps in the future.
