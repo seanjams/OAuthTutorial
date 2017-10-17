@@ -5,6 +5,7 @@
 In this tutorial, we will build the simplest possible Node/Express web app that lets users log in with their Google accounts and persist their session to the browser. Many tutorials on the topic can be very comprehensive and focused on implementing OAuth with large frameworks on the frontend and ORM's on the backend. Not this one. Our goal will be to have it up and running in 30 min, in a form that's easily altered to fit any Node backend.
 
 ## Phase 0
+
 First we will get everything set up for success. Start by visiting https://console.developers.google.com/projectselector/apis/library and selecting 'Create'. This will help us get a new clientID for our app, which verifies to Google that we're authorized to use their API. NOTE: This will be a slightly different process for each OAuth provider (Facebook, Twitter, etc...), but will often consist of similar steps.
 
 - Enter a project name and click 'Create', you will be given a project ID. Save it somewhere, it may be useful for your app later. (Not for ours!)
@@ -33,19 +34,23 @@ export const googleConfig = {
   callbackURL: 'http://localhost:3000/auth/google/callback'
 };
 ```
+
 ### DB Setup
 
 We are now setup to use Google+ API. However, before we can start building, we must have a database to work with. For this tutorial, make sure you have PostgreSQL installed and running on our computer. If you'd like to use a different database, the logic presented here should be easily adaptable.
 
-From the command line, run `psql` to open PostgreSQL. Type in the following command to create a new database titled `OAuthTutorial`. Don't forget the semicolon.
+From the command line, run `psql` to open PostgreSQL. Type in the following commands to create a new database titled `OAuthTutorial` with a `users` table containing 5 fields. Don't forget the semicolons.
 
-`CREATE DATABASE OAuthTutorial;`
+- `CREATE DATABASE OAuthTutorial;`
+- `\c OAuthTutorial`
+- `CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(80) NOT NULL, email VARCHAR(80) NOT NULL, avatar VARCHAR(200), googleId VARCHAR(80) NOT NULL, token VARCHAR(200) NOT NULL);`
 
 ### Node Setup
 
-Run `npm init --yes` in the terminal to create a package.json file in our new directory.
+Exit Postgres and run `npm init --yes` in our new directory to create a `package.json`.
 
 #### Node Modules We Will Use
+
 - `babel-cli` --- transpiles our fancy ES6 code into less fancy ES5 code
 - `babel-preset-es2015` --- ES6 preset
 - `body-parser` --- for sending form data in express requests
@@ -367,3 +372,18 @@ Since your frontend will completely replace these two files, feel free to copy a
 ```
 
 And there it is! We've done it! Be sure that all necessary dependencies are installed and included at the top of each file. Visit http://localhost:3000 and test it out! You are hereby an OAuth master.
+
+## Conclusion
+
+Using Passport.js for implementing OAuth on a Node.js backend is recommended by most major OAuth providers. Hopefully after successfully completing this tutorial, you can not only implement OAuth in your own Node applications, but also customize the logic here to suit your own needs. A lot of research and effort went into deciding what was and wasn't needed to perform a successful Google login, so that you wouldn't waste valuable time on other tutorials setting up something that doesn't apply to YOUR project.
+
+## More Resources
+
+Great alternative Facebook tutorial:
+- https://scotch.io/tutorials/easy-node-authentication-facebook
+
+OAuth2.0 docs:
+- https://auth0.com/docs/protocols/oauth2
+
+Passport docs:
+- http://passportjs.org/docs
