@@ -37,7 +37,7 @@ Now you are at the credentials page. Select 'Web Application' and fill in your p
 
 ---
 
-Create a new directory titled `OAuthTutorial`. Copy your clientID and client secret into an object like the one below in a new file `util.js`.
+Create a new directory titled `simple-node-app`. Copy your clientID and client secret into an object like the one below in a new file `util.js`.
 
 ``` javascript
 //util.js
