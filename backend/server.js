@@ -10,7 +10,7 @@ import { routerConfig } from './routes.js';
 const app = express();
 
 // //when we make post requests, we want to have the data sent in a body attribute
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //session middleware necessary to save and persists a users login session
 //the session key can be whatever you want, and the other two values should usually always be false

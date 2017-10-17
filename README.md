@@ -2,38 +2,50 @@
 
 ## About
 
-In this tutorial, we will build the simplest possible Node/Express web app that lets users log in with their Google accounts and persist their session to the browser. Many tutorials on the topic can be very comprehensive and focused on implenting Oauth with large frameworks on the frontend and ORM's on the backend. Not this one. Our goal will be to have it up and running in 30 min, in a form that's easily altered to fit any Node backend.
+In this tutorial, we will build the simplest possible Node/Express web app that lets users log in with their Google accounts and persist their session to the browser. Many tutorials on the topic can be very comprehensive and focused on implementing OAuth with large frameworks on the frontend and ORM's on the backend. Not this one. Our goal will be to have it up and running in 30 min, in a form that's easily altered to fit any Node backend.
 
 ## Phase 0
 First we will get everything set up for success. Start by visiting https://console.developers.google.com/projectselector/apis/library and selecting 'Create'. This will help us get a new clientID for our app, which verifies to Google that we're authorized to use their API. NOTE: This will be a slightly different process for each OAuth provider (Facebook, Twitter, etc...), but will often consist of similar steps.
 
-- First, enter a project name and click 'Create', you will be given a project ID. Save it somewhere, it may be useful for your app later. (Not for ours!)
+- Enter a project name and click 'Create', you will be given a project ID. Save it somewhere, it may be useful for your app later. (Not for ours!)
 ![one](assets/one.png)
 ---
-- Next, find Google+ API in the list of API's. Click on this item and then choose 'Enable'.
+- Next, select Google+ API in the list of API's and enable it. Google+ will provide us with basic user information and a profile photo for our simple app, but you can access all of Google's APIs here and use them for your applications.
 ![two](assets/two.png)
 ---
 - Go to the left menu and click 'Credentials'. Select 'Create Credentials' and 'OAuth client ID'.
 ![three](assets/three.png)
 ---
- - You will be told that you that you must create a consent screen before editing Credentials. Click 'Configure consent screen' in the top right corner, and just enter your project name and 'Save'. You can customize this menu for your own apps in the future.
+ - You will be told that you that you must create a consent screen before editing Credentials. Click 'Configure consent screen' in the top right corner. We will do the minimum, just enter your project name and 'Save'. Use this menu to customize the consent form Google sends you when requesting sensitive information for your future apps.
 ![four](assets/four.png)
 ---
-- Now you are at the credentials page. Select 'Web Application' and fill in your project name and the following path under 'Authorized redirect URIs'. This is the URL that google will use to send information back to our app. After you are done, hit 'Create'.
+- Now you are at the credentials page. Select 'Web Application' and fill in your project name and whichever path you would like Google to send a user's information under 'Authorized redirect URIs'. We are using `auth/google/callback` After you are done, hit 'Create'.
 ![five](assets/five.png)
 ---
-- Lastly, copy your clientID and client secret into an empty file, and we will use these in our app!
-![six](assets/six.png)
----
+Create a new directory titled `OAuthTutorial`. Copy your clientID and client secret into an object like the one below in a new file `util.js`.
+
+``` javascript
+//util.js
+
+export const googleConfig = {
+  clientID: 'client-id-here',
+  clientSecret: 'client-secret-here',
+  callbackURL: 'http://localhost:3000/auth/google/callback'
+};
+```
+### DB Setup
+
 We are now setup to use Google+ API. However, before we can start building, we must have a database to work with. For this tutorial, make sure you have PostgreSQL installed and running on our computer. If you'd like to use a different database, the logic presented here should be easily adaptable.
 
 From the command line, run `psql` to open PostgreSQL. Type in the following command to create a new database titled `OAuthTutorial`. Don't forget the semicolon.
 
 `CREATE DATABASE OAuthTutorial;`
 
-Now create a new directory titled whatever you'd like, and run `npm init --yes` in the terminal to create a package.json file in this directory.
+### Node Setup
 
-### Node Modules We Will Use
+Run `npm init --yes` in the terminal to create a package.json file in our new directory.
+
+#### Node Modules We Will Use
 - `babel-cli` --- transpiles our fancy ES6 code into less fancy ES5 code
 - `babel-preset-es2015` --- ES6 preset
 - `body-parser` --- for sending form data in express requests
@@ -49,7 +61,7 @@ Run `npm install --save module1 module2 ...` to install the node modules above. 
 
 ## Phase 1
 
-Now for the fun stuff. Let's create a file called `server.js` and start a basic express server. Put this file in a folder called `backend`.
+Now for the fun stuff. Let's create a file called `server.js` and start a basic express server. Put this file in a new directory called `/backend`, along with `util.js`.
 
 ``` javascript
 import express from 'express';
@@ -63,7 +75,7 @@ app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
 ```
-This is pretty standard boiler-plate express code. You may be curious about what `bodyParser` is doing. This enables frontend forms to ship data along with POST requests to our Express backend. Although we won't have any forms to worry about, it will help us test our database connection with Postman.
+This is pretty standard boiler-plate express code. You may be curious about what `bodyParser` is doing. This enables frontend forms to ship data along with POST requests to our Express backend. Although we won't have any forms to worry about, it will help you test your database connection with Postman in future apps.
 
 We can try and run this file and start the server with the command `node backend/server.js`, but our ES6 code will cause the server to break. Additionally, it would break every time we updated our code in the future. Let's run the server with `nodemon` so we don't have to worry about ES6 or continually restarting our server. Add the following script under `"start"` to your `package.json`.
 
@@ -74,18 +86,18 @@ We can try and run this file and start the server with the command `node backend
 },
 ```
 
-Go ahead and run `npm start` from the root directory and verify that everything's working before moving on.
+Go ahead and run `npm start` in the console from the root directory and verify that everything's working before moving on.
 
 ## Phase 2
 
-Now let's test our connection to our database by writing some simple controller actions and routes. Make two new files in the `backend` folder called `routes.js` and `controller.js`.
+Now let's test our connection to our database by writing some simple controllers and routes. Make two new files in `/backend`  called `controller.js` and `routes.js`.
 
-First, let's write a function in `controller.js` that will fetch all users in our database. Each Express controller function takes a request and response as arguments, and generally follow these steps:
-- Open a connection to the database. (unless using an ORM)
-- Query the database for the information you need.
-- If found, send the data in the response argument as JSON.
-- If something goes wrong, send an error in the response.
-- Close the connection to the database after all queries are complete so another future connection can be made. (unless using an ORM)
+First, let's write a controller that will fetch all users in our database. Each Express controller function takes a request and response as its first two arguments, and generally follows these steps:
+1. Open a connection to the database. (unless using an ORM)
+2. Query the database for the information you need.
+3. If found, send the data in the response argument as JSON.
+4. If something goes wrong, send an error in the response.
+5. Close the connection to the database after all queries are complete so another future connection can be made. (unless using an ORM)
 
 ``` javascript
 //controller.js
@@ -103,8 +115,7 @@ export const getAllUsers = (req, res) => {
 };
 ```
 
-We can quickly set up our test route with the following few lines of code in `routes.js`. Any future routes can be listed right inside the `routerConfig` function. This will act as a middleware plugin for our app object. Go ahead and import the `routerConfig` function to `server.js` and invoke before the final call to `app.listen`.
-
+We can quickly set up a test route with the following few lines of code. Any future routes can be listed right inside the `routerConfig` function. This will act as a sort of middleware for our app object.
 ``` javascript
 //routes.js
 
@@ -114,6 +125,9 @@ export const routerConfig = app => {
   app.get('/api/users', controller.getAllUsers);
 };
 
+```
+Go ahead and import the `routerConfig` function to `server.js` and invoke before the final call to `app.listen`.
+``` javascript
 //server.js
 
 import express from 'express';
@@ -133,24 +147,13 @@ app.listen(3000, () => {
 
 Since our backend is being served by nodemon, we can see if there are any users in our database by making a GET request to http://localhost:3000/api/users.
 
-
-Explore writing the entire CRUD cycle in these two files and test with Postman! This is how we create a simple RESTful API in Node.js.
+Explore writing the entire CRUD cycle in these two files and test with Postman! This is how we create simple RESTful API endpoints in Node.js.
 
 ## Phase 3
 
 Now that we have some controllers and routes to work with, we can add our passport logic to start making requests for user information right to Google.
 
-Remember the clientID and clientSecret from before? We will need these. Throw a nested object containing these and our Google callbackURL in a new file in `backend` called `util.js` and export it.
-
-``` javascript
-export const googleConfig = {
-  clientID: '71042043336-1q1fhgjrj3b4k1inke8vo5u1gsqfq8vp.apps.googleusercontent.com',
-  clientSecret: 'tnGu6VIAjKvaqBy1Yz5a47JU',
-  callbackURL: 'http://localhost:3000/auth/google/callback'
-};
-```
-
-The following code is the heart of this tutorial. Let's put it in another new file in `backend` called `passport.js`. In here, we will create another piece of middleware for our soon-to-exist passport object that adds an OAuth2Strategy containing our app's sensitive information. This is fairly boiler-plate code, with helper methods doing their best to filter out the logic specific to our use of Postgres. In other words, `findUserById` and `findOrCreateUser` are functions that can be rewritten to use another database or ORM, without changing our `passportConfig` logic in any way.
+The following code is the heart of OAuth for a Node project. Let's put it in new file in `/backend` called `passport.js`. In here, we will create another piece of middleware for our soon-to-exist passport object that adds an OAuth2Strategy which uses our app's clientID and client secret for verification. This is fairly confusing, but fairly standard passport code, with helper methods doing their best to filter out the logic specific to our use of Postgres. In other words, `findUserById` and `findOrCreateUser` are functions that can be rewritten to use another database or ORM, without changing our `passportConfig` logic in any way. Look intently at how the `done` function is passed and used.
 
 ``` javascript
 //passport.js
@@ -177,7 +180,7 @@ export const passportConfig = (passport) => {
   }));
 }
 
-//helper functions for passportConfig
+//Helper functions for passportConfig
 
 const findUserById = (id, done) => {
   const client = new pg.Client(connectionString);
@@ -222,11 +225,7 @@ const photoUrlHelper = (url) => {
 };
 ```
 
-## Phase 4
-
-Cleanup time. Let's update our `routes.js` and `server.js` to involve this passport logic, and make some views for the frontend.
-
-First, we will add several new routes as well as a second passport argument to `routerConfig`. Then we just need to add our passport and session middleware to `server.js`
+We must add several new routes as well as a second passport argument to `routerConfig` to handle the auth routes that will be using this strategy. Don't worry about the frontend routes in `/` and `/profile`, we will add those before we test.
 
 ``` javascript
 //routes.js
@@ -285,6 +284,12 @@ export const routerConfig = (app, passport) => {
 }
 ```
 
+## Phase 4
+
+Cleanup time. Let's update our `server.js` to involve this passport logic, and make some views for the frontend so we can test.
+
+Import `passport` and `express-session` as well as our passportConfig function to `server.js`. First pass the `session` middleware to `app.use`. Don't worry about the options for `saveUninitialized` and `resave`, those are required defaults. Then invoke our `passportConfig` function on the `passport` object, which takes in our very own Google Strategy before being sent to `routerConfig` to handle the authentication routes. Finally, invoke `initialize` and `session` on `passport` to complete the backend. See entire `server.js` below.
+
 ``` javascript
 //server.js
 
@@ -292,7 +297,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import session from 'express-session';
-import * as controller from './controller.js';
 import { passportConfig } from './passport.js';
 import { routerConfig } from './routes.js';
 
@@ -316,9 +320,14 @@ app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
 ```
-To mimic a frontend, we will add a `frontend` folder and two new files `login.html` and `profile.ejs`. The login page will present a button that directs to our `auth/google` route. The profile page will be a protected route that can only be reached after successfully logging in.
+#### Frontend
 
-Since your frontend will completely replace these two files, there's no need to dive into the specifics. Copy and paste or clean to your desired satisfaction.
+To mimic a frontend, we will add a `/frontend` folder alongside our backend and two new files `login.html` and `profile.ejs`. We will use embedded javascript for the profile page to easily incorporate the user's name and profile picture into the rendered XML.
+
+- The login page will present a button that directs to our `auth/google` route.
+- The profile page will be a protected route that can only be reached after successfully logging in (protected by the `isLoggedIn` function in `routes.js`).
+
+Since your frontend will completely replace these two files, feel free to copy and paste this code or clean to your desired satisfaction.
 
 ``` xml
 <!-- login.html -->
@@ -357,4 +366,4 @@ Since your frontend will completely replace these two files, there's no need to 
 </html>
 ```
 
-And there it is! We've done it! Be sure that all necessary dependencies are installed and included at the top of each file. Visit http://localhost:3000 and test it out!
+And there it is! We've done it! Be sure that all necessary dependencies are installed and included at the top of each file. Visit http://localhost:3000 and test it out! You are hereby an OAuth master.
