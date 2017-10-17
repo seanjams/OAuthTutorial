@@ -8,21 +8,31 @@ In this tutorial, we will build the simplest possible Node/Express web app that 
 
 First we will get everything set up for success. Start by visiting https://console.developers.google.com/projectselector/apis/library and selecting 'Create'. This will help us get a new clientID for our app, which verifies to Google that we're authorized to use their API. NOTE: This will be a slightly different process for each OAuth provider (Facebook, Twitter, etc...), but will often consist of similar steps.
 
-- Enter a project name and click 'Create', you will be given a project ID. Save it somewhere, it may be useful for your app later. (Not for ours!)
+Enter a project name and click 'Create', you will be given a project ID. Save it somewhere, it may be useful for your app later. (Not for ours!)
 ![one](assets/one.png)
+
 ---
-- Next, select Google+ API in the list of API's and enable it. Google+ will provide us with basic user information and a profile photo for our simple app, but you can access all of Google's APIs here and use them for your applications.
+
+Next, select Google+ API in the list of API's and enable it. Google+ will provide us with basic user information and a profile photo for our simple app, but you can access all of Google's APIs here and use them for your applications.
 ![two](assets/two.png)
+
 ---
-- Go to the left menu and click 'Credentials'. Select 'Create Credentials' and 'OAuth client ID'.
+
+Go to the left menu and click 'Credentials'. Select 'Create Credentials' and 'OAuth client ID'.
 ![three](assets/three.png)
+
 ---
- - You will be told that you that you must create a consent screen before editing Credentials. Click 'Configure consent screen' in the top right corner. We will do the minimum, just enter your project name and 'Save'. Use this menu to customize the consent form Google sends you when requesting sensitive information for your future apps.
+
+You will be told that you that you must create a consent screen before editing Credentials. Click 'Configure consent screen' in the top right corner. We will do the minimum, just enter your project name and 'Save'. Use this menu to customize the consent form Google sends you when requesting sensitive information for your future apps.
 ![four](assets/four.png)
+
 ---
-- Now you are at the credentials page. Select 'Web Application' and fill in your project name and whichever path you would like Google to send a user's information under 'Authorized redirect URIs'. We are using `auth/google/callback` After you are done, hit 'Create'.
+
+Now you are at the credentials page. Select 'Web Application' and fill in your project name and whichever path you would like Google to send a user's information under 'Authorized redirect URIs'. We are using `auth/google/callback` After you are done, hit 'Create'.
 ![five](assets/five.png)
+
 ---
+
 Create a new directory titled `OAuthTutorial`. Copy your clientID and client secret into an object like the one below in a new file `util.js`.
 
 ``` javascript
