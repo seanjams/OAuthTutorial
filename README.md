@@ -1,5 +1,9 @@
 # OAuth 2.0 Tutorial
 
+## Quick Launch
+
+Unfortunately there is no live demo link. Clone the repository and follow Phase 0, setting up a Google Cloud Project and a PostgreSQL database. Copy your clientID and client secret from Google into `backend/util.js`. Run `npm start` in the console to start the backend server, and visit http://localhost:3000/ to log in.
+
 ## About
 
 In this tutorial, we will build the simplest possible Node/Express web app that lets users log in with their Google accounts and persist their session to the browser. Many tutorials on the topic can be very comprehensive and focused on implementing OAuth with large frameworks on the frontend and ORM's on the backend. Not this one. Our goal will be to have it up and running in 30 min, in a form that's easily adaptable to fit any Node backend.
@@ -385,7 +389,7 @@ And there it is! We've done it! Be sure that all necessary dependencies are inst
 
 ## Conclusion
 
-Using Passport.js for implementing OAuth on a Node.js backend is recommended by most major OAuth providers. Hopefully after successfully completing this tutorial, you can not only implement OAuth in your own Node applications, but also customize the logic here to suit your own needs. A lot of research and effort went into deciding what was and wasn't needed to perform a successful Google login, so that you wouldn't waste valuable time on other tutorials setting up something that doesn't apply to YOUR project.
+Using Passport.js for implementing OAuth with a Node.js backend is recommended by most major OAuth providers. Hopefully after successfully completing this tutorial, you can not only implement OAuth in your own Node applications, but also customize the logic here to suit your own needs. A lot of research and effort went into deciding what was and wasn't needed to perform a successful Google login, so that you wouldn't waste valuable time on other tutorials setting up something that doesn't apply to YOUR project.
 
 ## More Resources
 
