@@ -2,7 +2,7 @@
 
 ## About
 
-In this tutorial, we will build the simplest possible Node/Express web app that lets users log in with their Google accounts and persist their session to the browser. Many tutorials on the topic can be very comprehensive and focused on implementing OAuth with large frameworks on the frontend and ORM's on the backend. Not this one. Our goal will be to have it up and running in 30 min, in a form that's easily altered to fit any Node backend.
+In this tutorial, we will build the simplest possible Node/Express web app that lets users log in with their Google accounts and persist their session to the browser. Many tutorials on the topic can be very comprehensive and focused on implementing OAuth with large frameworks on the frontend and ORM's on the backend. Not this one. Our goal will be to have it up and running in 30 min, in a form that's easily adaptable to fit any Node backend.
 
 ## Phase 0
 
@@ -371,7 +371,7 @@ Since your frontend will completely replace these two files, feel free to copy a
 </html>
 ```
 
-And there it is! We've done it! Be sure that all necessary dependencies are installed and included at the top of each file. Visit http://localhost:3000 and test it out! You are hereby an OAuth master.
+And there it is! We've done it! Be sure that all necessary dependencies are installed and included at the top of each file. Visit http://localhost:3000 and test it out! Refresh the page and notice the persistence. You are hereby an OAuth master.
 
 ## Conclusion
 

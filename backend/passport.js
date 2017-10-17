@@ -16,7 +16,7 @@ export const passportConfig = (passport) => {
   (token, refreshToken, profile, done) => {
     process.nextTick(() => findOrCreateUser(token, profile, done));
   }));
-}
+};
 
 //helper functions for passportConfig
 
