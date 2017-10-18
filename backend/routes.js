@@ -6,7 +6,7 @@ const isLoggedIn = (req, res, next) => {
     return next();
   }
   res.redirect('/');
-}
+};
 
 export const routerConfig = (app, passport) => {
   //use these to test that it's working
@@ -32,7 +32,7 @@ export const routerConfig = (app, passport) => {
     req.logout();
     //eliminates token saved by express-session
     req.session.destroy();
-    
+
     res.redirect('/');
   });
 
@@ -50,4 +50,4 @@ export const routerConfig = (app, passport) => {
       failureredirect: '/'
     })
   );
-}
+};

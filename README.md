@@ -2,7 +2,7 @@
 
 ## Quick Launch
 
-Unfortunately there is no live demo link. Clone the repository and follow Phase 0, setting up a Google Cloud Project and a PostgreSQL database. Copy your clientID and client secret from Google into `backend/util.js`. Run `npm start` in the console to start the backend server, and visit http://localhost:3000/ to log in.
+Clone the repository and follow Phase 0, setting up a Google Cloud Project and a PostgreSQL database. Copy your clientID and client secret from Google into `backend/util.js`. Run `npm start` in the console to start the backend server, and visit http://localhost:3000/ to log in.
 
 ## About
 
@@ -94,7 +94,7 @@ app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
 ```
-This is pretty standard boiler-plate express code, in which we create an `app`, add some middleware (more to come), and then serve it on port `3000`. You may be curious about what `bodyParser` is doing. This enables frontend forms to ship data along with POST requests to our Express backend. Although we won't have any forms to worry about, it will help you test your database connection with Postman in future apps.
+This is pretty standard boiler-plate express code, in which we create an `app` express object, add some middleware (more to come), and then serve it on port 3000. You may be curious about what `bodyParser` is doing. This enables frontend forms to ship data along with POST requests to our Express backend. Although we won't have any forms to worry about, it will help you test your database connection with Postman in future apps.
 
 We can try and run this file and start the server with the command `node backend/server.js`, but our ES6 code will cause the server to break. Additionally, it would break every time we updated our code in the future. Let's run the server with `nodemon` so we don't have to worry about ES6 or continually restarting our server. Add the following script under `"start"` to your `package.json`.
 
@@ -134,7 +134,7 @@ export const getAllUsers = (req, res) => {
 };
 ```
 
-We can quickly set up a test route with the following few lines of code. Any future routes can be listed right inside the `routerConfig` function. This will act as a sort of middleware for our app object.
+We can quickly set up a test route with the following few lines of code. Any future routes can be listed right inside the `routerConfig` function. This will act as a sort of middleware for our `app` object.
 ``` javascript
 //routes.js
 
@@ -239,9 +239,7 @@ const findOrCreateUser = (token, profile, done) => {
 };
 
 //Google Profile Img url comes with query string tagged on to make image size tiny, so this cuts it off
-const photoUrlHelper = (url) => {
-  return url.substr(0, url.indexOf('?'));
-};
+const photoUrlHelper = url => url.substr(0, url.indexOf('?'));
 ```
 
 We must add several new routes as well as a second passport argument to `routerConfig` to handle the auth routes that will be using this strategy. Don't worry about the frontend routes in `/` and `/profile`, we will add those before we test.
@@ -344,7 +342,7 @@ app.listen(3000, () => {
 To mimic a frontend, we will add a `/frontend` folder alongside our backend and two new files `login.html` and `profile.ejs`. We will use embedded javascript for the profile page to easily incorporate the user's name and profile picture into the rendered XML.
 
 - The login page will present a button that directs to our `auth/google` route.
-- The profile page will be a protected route that can only be reached after successfully logging in (protected by the `isLoggedIn` function in `routes.js`).
+- The profile page will be a protected route that can only be reached after successfully logging in (protected by the `isLoggedIn` function in `routes.js`), and includes a button to our `/logout` route.
 
 Since your frontend will completely replace these two files, feel free to copy and paste this code or clean to your desired satisfaction.
 
