@@ -2,7 +2,7 @@
 
 ## Quick Launch
 
-Clone the repository and follow Phase 0, setting up a Google Cloud Project and a PostgreSQL database. Copy your clientID and client secret from Google into `backend/util.js`. Run `npm start` in the console to start the backend server, and visit http://localhost:3000/ to log in.
+Clone the repository `npm install`. Follow Phase 0, setting up a Google Cloud Project and a PostgreSQL database. Copy your clientID and client secret from Google into `backend/util.js`. Run `npm start` in the console to start the backend server, and visit http://localhost:3000/ to log in with your Google account.
 
 ## About
 
