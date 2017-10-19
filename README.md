@@ -197,7 +197,7 @@ export const passportConfig = (passport) => {
   (token, refreshToken, profile, done) => {
     process.nextTick(() => findOrCreateUser(token, profile, done));
   }));
-}
+};
 
 //Helper functions for passportConfig
 
@@ -339,12 +339,12 @@ app.listen(3000, () => {
 ```
 #### Frontend
 
-To mimic a frontend, we will add a `/frontend` folder alongside our backend and two new files `login.html` and `profile.ejs`. We will use embedded javascript for the profile page to easily incorporate the user's name and profile picture into the rendered XML.
+To mimic a frontend, we will add a `/frontend` folder alongside our backend with two new files `login.html` and `profile.ejs`. We will use embedded javascript for the profile page to easily incorporate the user's name and profile picture into the rendered XML.
 
 - The login page will present a button that directs to our `auth/google` route.
 - The profile page will be a protected route that can only be reached after successfully logging in (protected by the `isLoggedIn` function in `routes.js`), and includes a button to our `/logout` route.
 
-Since your frontend will completely replace these two files, feel free to copy and paste this code or clean to your desired satisfaction.
+Since your frontend will completely replace these two files, feel free to copy and paste this code and style to your satisfaction.
 
 ``` xml
 <!-- login.html -->
