@@ -8,11 +8,7 @@ export const passportConfig = (passport) => {
   // used to deserialize the user
   passport.deserializeUser((id, done) => findUserById(id, done));
 
-  passport.use(new GoogleStrategy({
-    clientID: googleConfig.clientID,
-    clientSecret: googleConfig.clientSecret,
-    callbackURL: googleConfig.callbackURL,
-  },
+  passport.use(new GoogleStrategy(googleConfig,
   (token, refreshToken, profile, done) => {
     process.nextTick(() => findOrCreateUser(token, profile, done));
   }));
