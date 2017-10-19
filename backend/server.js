@@ -2,7 +2,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import session from 'express-session';
-import * as controller from './controller.js';
 import { passportConfig } from './passport.js';
 import { routerConfig } from './routes.js';
 
@@ -13,7 +12,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //session middleware necessary to save and persists a users login session
-//the session key can be whatever you want, and the other two values should usually always be false
+//the session key can be whatever you want, and the other two values are required defaults
 //docs: https://github.com/expressjs/session
 app.use(session({
   secret: 'PutAnythingYouWantHere',
