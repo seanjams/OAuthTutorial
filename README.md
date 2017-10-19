@@ -172,7 +172,7 @@ Looks like there's nothing. But if you see an object resembling `{users: []}`, t
 
 Now that we have some controllers and routes to work with, we can add our passport logic to start making requests for user information right to Google.
 
-The following code is the heart of OAuth for a Node project. Let's put it in new file in `/backend` called `passport.js`. In here, we will create another piece of middleware for our soon-to-exist passport object that adds an OAuth2Strategy which uses our app's clientID and client secret for verification. This is fairly confusing, but fairly standard passport code, with helper methods doing their best to filter out the logic specific to our use of Postgres. In other words, `findUserById` and `findOrCreateUser` are functions that can be rewritten to use another database or ORM, without changing our `passportConfig` logic in any way. Look intently at how the `done` function is passed and used.
+The following code is the heart of OAuth for a Node project. Let's put it in new file in `/backend` called `passport.js`. In here, we will create another piece of middleware for our soon-to-exist `passport` object that adds an OAuth2Strategy which uses our app's clientID and client secret for verification. This is fairly confusing, but also fairly standard passport code, with helper methods doing their best to filter out the logic specific to our use of Postgres. In other words, `findUserById` and `findOrCreateUser` are functions that can be rewritten to use another database or ORM, without changing our `passportConfig` logic in any way. Look intently at how the `done` function is passed and used.
 
 ``` javascript
 //passport.js
@@ -242,7 +242,7 @@ const findOrCreateUser = (token, profile, done) => {
 const photoUrlHelper = url => url.substr(0, url.indexOf('?'));
 ```
 
-We must add several new routes as well as a second passport argument to `routerConfig` to handle the auth routes that will be using this strategy. Don't worry about the frontend routes in `/` and `/profile`, we will add those before we test.
+We must add several new routes as well as a second passport argument to `routerConfig` to handle the auth routes that will be using this strategy. Don't worry about the frontend files being sent in `/` and `/profile`, we will add those before we test.
 
 ``` javascript
 //routes.js
@@ -256,7 +256,7 @@ const isLoggedIn = (req, res, next) => {
     return next();
   }
   res.redirect('/');
-}
+};
 
 export const routerConfig = (app, passport) => {
   app.get('/api/users', controller.getAllUsers);
@@ -298,7 +298,7 @@ export const routerConfig = (app, passport) => {
       failureredirect: '/'
     })
   );
-}
+};
 ```
 
 ## Phase 4
