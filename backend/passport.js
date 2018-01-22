@@ -9,9 +9,9 @@ export const passportConfig = (passport) => {
   passport.deserializeUser((id, done) => findUserById(id, done));
 
   passport.use(new GoogleStrategy(googleConfig,
-  (token, refreshToken, profile, done) => {
-    process.nextTick(() => findOrCreateUser(token, profile, done));
-  }));
+    (token, refreshToken, profile, done) => {
+      process.nextTick(() => findOrCreateUser(token, profile, done));
+    }));
 };
 
 //helper functions for passportConfig
@@ -20,14 +20,14 @@ const findUserById = (id, done) => {
   const client = new pg.Client(connectionString);
   client.connect(err => {
     client.query(`SELECT * FROM users WHERE id=\'${id}\'`)
-    .then(
+      .then(
       data => {
         const user = data.rows[0];
         done(null, user);
       },
       err => done(err, null)
-    )
-    .then(() => client.end());
+      )
+      .then(() => client.end());
   });
 };
 
@@ -35,21 +35,21 @@ const findOrCreateUser = (token, profile, done) => {
   const client = new pg.Client(connectionString);
   client.connect(err => {
     client.query(`SELECT * FROM users WHERE googleId=\'${profile.id}\'`)
-    .then(
+      .then(
       foundUsers => {
         let user = foundUsers.rows[0];
         if (user) {
           done(null, user);
         } else {
           client.query(`INSERT INTO users (name, email, avatar, googleId, token) VALUES (\'${profile.name.givenName}\', \'${profile.emails[0].value}\', \'${photoUrlHelper(profile.photos[0].value)}\', \'${profile.id}\', \'${token}\') RETURNING *`)
-          .then(
+            .then(
             createdUsers => done(null, createdUsers.rows[0]),
             err => done(err, null)
-          );
+            );
         }
       }
-    )
-    .then(() => client.end());
+      )
+      .then(() => client.end());
   });
 };
 

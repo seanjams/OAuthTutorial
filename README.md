@@ -53,10 +53,10 @@ export const googleConfig = {
 
 We are now setup to use Google+ API. However, before we can start building, we must have a database to work with. For this tutorial, make sure you have PostgreSQL installed and running on our computer.
 
-From the command line, run `psql` to open PostgreSQL. Type in the following commands to create a new database titled `OAuthTutorial` with a `users` table containing 5 fields. Don't forget the semicolons.
+From the command line, run `psql` to open PostgreSQL. Type in the following commands to create a new database titled `oauthtutorial` with a `users` table containing 5 fields. Don't forget the semicolons.
 
-1. `CREATE DATABASE OAuthTutorial;`
-2. `\c OAuthTutorial`
+1. `CREATE DATABASE oauthtutorial;`
+2. `\c oauthtutorial`
 3. `CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(80) NOT NULL, email VARCHAR(80) NOT NULL, avatar VARCHAR(200), googleId VARCHAR(80) NOT NULL, token VARCHAR(200) NOT NULL);`
 
 ### Node Setup
@@ -122,7 +122,7 @@ Write a controller that will fetch all users in our database. Each Express contr
 //controller.js
 
 const pg = require('pg');
-const connectionString = process.env.DATABASE_URL || 'postgres://localhost/OAuthTutorial';
+const connectionString = process.env.DATABASE_URL || 'postgres://localhost/oauthtutorial';
 
 export const getAllUsers = (req, res) => {
   const client = new pg.Client(connectionString);
@@ -181,7 +181,7 @@ import pg from 'pg';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { googleConfig } from './util.js';
 
-const connectionString = process.env.DATABASE_URL || 'postgres://localhost/auth0tutorial';
+const connectionString = process.env.DATABASE_URL || 'postgres://localhost/oauthtutorial';
 
 export const passportConfig = (passport) => {
   // used to serialize the user for the session
@@ -353,7 +353,7 @@ Since your frontend will completely replace these two files, feel free to copy a
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Auth0 Tutorial</title>
+    <title>OAuthTutorial</title>
   </head>
   <body>
     <div id="root">

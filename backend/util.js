@@ -1,4 +1,4 @@
-export const connectionString = process.env.DATABASE_URL || 'postgres://localhost/auth0tutorial';
+export const connectionString = process.env.DATABASE_URL || 'postgres://localhost/oauthtutorial';
 
 export const googleConfig = {
   clientID: 'client-id-here',
